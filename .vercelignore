@@ -1,0 +1,5 @@
+mongodb_data/
+image.png
+check_mongodb.py
+test_api.py
+.env
