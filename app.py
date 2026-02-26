@@ -107,6 +107,37 @@ else:
     gemini_model = None
 
 
+def _local_chat_reply(message, language="en"):
+    text = (message or "").lower()
+    private_unis = [u for u in UNIVERSITIES if u.get("type") == "Private"]
+    deemed_unis = [u for u in UNIVERSITIES if u.get("type") == "Deemed"]
+    private_count = len(private_unis)
+    deemed_count = len(deemed_unis)
+
+    if any(word in text for word in ["count", "how many", "number", "किती", "संख्या"]):
+        if language == "mr":
+            return f"सध्या पोर्टलमध्ये {private_count} खाजगी आणि {deemed_count} मानित विद्यापीठांची नोंद आहे."
+        return f"The portal currently lists {private_count} private universities and {deemed_count} deemed universities."
+
+    if any(word in text for word in ["private", "खाजगी", "list", "names", "विद्यापीठ"]):
+        top_private = [u.get("name") for u in private_unis[:5] if u.get("name")]
+        if top_private:
+            if language == "mr":
+                return "उदाहरणार्थ काही खाजगी विद्यापीठे: " + ", ".join(top_private) + ". अधिक माहिती साठी Explore विभाग पहा."
+            return "Some private universities include: " + ", ".join(top_private) + ". You can view more in the Explore section."
+
+    if any(word in text for word in ["deemed", "मानित"]):
+        top_deemed = [u.get("name") for u in deemed_unis[:5] if u.get("name")]
+        if top_deemed:
+            if language == "mr":
+                return "काही मानित विद्यापीठे: " + ", ".join(top_deemed) + "."
+            return "Some deemed universities are: " + ", ".join(top_deemed) + "."
+
+    if language == "mr":
+        return "मी मदत करू शकतो: विद्यापीठांची यादी, प्रवेश माहिती, पात्रता आणि अधिकृत वेबसाइट दुवे. कृपया तुमचा प्रश्न थोडा अधिक स्पष्ट लिहा."
+    return "I can help with university lists, admissions info, eligibility, and official website links. Please share your question with a bit more detail."
+
+
 
 
 @app.route("/")
@@ -253,15 +284,15 @@ def explore():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    if not gemini_model:
-        return jsonify({"error": "GEMINI_API_KEY is not configured."}), 500
-
     payload = request.get_json(silent=True) or {}
     message = (payload.get("message") or "").strip()
     language = payload.get("language", "en")  # Get language preference
 
     if not message:
         return jsonify({"error": "Message is required."}), 400
+
+    if not gemini_model:
+        return jsonify({"reply": _local_chat_reply(message, language), "source": "local"})
 
     # Build university context for Gemini
     private_unis = [u for u in UNIVERSITIES if u['type'] == 'Private']
@@ -294,14 +325,22 @@ def chat():
         )
 
     try:
-        response = gemini_model.generate_content(prompt)
+        response = gemini_model.generate_content(
+            prompt,
+            request_options={"timeout": 20},
+        )
         reply = (response.text or "").strip()
-        fallback = "क्षमस्व, मी प्रतिसाद तयार करू शकलो नाही." if language == "mr" else "Sorry, I couldn't generate a response."
-        return jsonify({"reply": reply or fallback})
+        if not reply:
+            reply = _local_chat_reply(message, language)
+            return jsonify({"reply": reply, "source": "local"})
+        return jsonify({"reply": reply, "source": "gemini"})
     except Exception as exc:
         app.logger.exception("Gemini API error")
-        error_msg = "प्रतिसाद तयार करण्यात अयशस्वी." if language == "mr" else "Failed to generate response."
-        return jsonify({"error": error_msg, "details": str(exc)}), 500
+        return jsonify({
+            "reply": _local_chat_reply(message, language),
+            "source": "local",
+            "note": "Fallback response used due to model error."
+        })
 
 
 @app.route("/download-brochure")

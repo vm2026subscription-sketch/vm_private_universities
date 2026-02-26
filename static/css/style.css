@@ -44,43 +44,61 @@ body {
     background: linear-gradient(90deg, var(--primary), var(--accent));
 }
 
-.topbar__ribbon {
-    background: #fff3e8;
+.topbar__portal {
+    background: #f4f4f4;
     border-bottom: 1px solid var(--border);
-    font-size: 0.85rem;
 }
 
-.topbar__ribbon-inner {
-    display: flex;
+.topbar__portal-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: space-between;
-    padding: 6px 0;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 24px;
+    padding: 10px 0;
 }
 
-.ribbon__left,
-.ribbon__right {
+.portal__left {
     display: flex;
     align-items: center;
-    gap: 10px;
+}
+
+.portal__logo {
+    width: 220px;
+    max-width: 100%;
+    height: auto;
+}
+
+.portal__center {
+    text-align: center;
+    color: var(--text);
+}
+
+.portal__title-mr {
     color: var(--primary-dark);
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.1;
 }
 
-.divider {
+.portal__title-en {
     color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
 }
 
-.ribbon-link {
-    color: var(--primary-dark);
-    text-decoration: none;
-    font-weight: 600;
+.portal__dept {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 4px;
 }
+
 
 .topbar__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 16px 0;
     gap: 16px;
 }
@@ -116,6 +134,7 @@ body {
     display: flex;
     gap: 18px;
     flex-wrap: wrap;
+    margin-right: auto;
 }
 
 .nav a {
@@ -697,6 +716,26 @@ body {
 }
 
 @media (max-width: 768px) {
+    .topbar__portal-inner {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .portal__logo {
+        width: 180px;
+    }
+
+    .portal__title-mr {
+        font-size: 1.1rem;
+    }
+
+    .portal__title-en,
+    .portal__dept {
+        font-size: 0.78rem;
+    }
+
     .topbar__inner {
         flex-direction: column;
         gap: 16px;
