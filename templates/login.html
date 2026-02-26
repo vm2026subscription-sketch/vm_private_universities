@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Maharashtra Private Universities</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f37a1f 0%, #ff9a56 100%);
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 48px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(243, 122, 31, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--muted);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .remember-forgot input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        .remember-forgot a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(243, 122, 31, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid var(--border);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .login-box {
+                padding: 32px 24px;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar__ribbon">
+            <div class="container topbar__ribbon-inner">
+                <div class="ribbon__left">
+                    <span>Government of Maharashtra</span>
+                    <span class="divider">|</span>
+                    <span>Department of Higher Education</span>
+                </div>
+                <div class="ribbon__right">
+                    <a href="#" class="ribbon-link">Skip to Main Content</a>
+                    <a href="#" class="ribbon-link">A-</a>
+                    <a href="#" class="ribbon-link">A</a>
+                    <a href="#" class="ribbon-link">A+</a>
+                </div>
+            </div>
+        </div>
+        <div class="container topbar__inner">
+            <div class="brand">
+                <div class="brand__logo">MPU</div>
+                <div class="brand__text">
+                    <p class="brand__title">Maharashtra Private Universities</p>
+                    <p class="brand__subtitle">Unified Admissions Portal</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="/#overview">Overview</a>
+                <a href="/#universities">Universities</a>
+            </nav>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                {% if user_name %}
+                    <div style="position: relative; display: inline-block;">
+                        <button id="profileBtn" style="background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">👤</button>
+                        <div id="profileMenu" style="display: none; position: absolute; right: 0; top: 50px; background: white; border: 2px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 160px; z-index: 100;">
+                            <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--primary-dark);">{{ user_name }}</div>
+                            <a href="/logout" style="display: block; padding: 12px 16px; color: var(--text); text-decoration: none; transition: background 0.2s;">Logout</a>
+                        </div>
+                    </div>
+                {% endif %}
+                <a href="/explore" class="cta">Start Application</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <h1>Login</h1>
+                    <p>Access your application portal</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="error-message" id="errorMessage"></div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="your.email@example.com"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="••••••••"
+                            required
+                        />
+                    </div>
+
+                    <div class="remember-forgot">
+                        <label>
+                            <input type="checkbox" name="remember" />
+                            Remember me
+                        </label>
+                        <a href="#">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">Sign In</button>
+                </form>
+
+                <div class="signup-link">
+                    Don't have an account? <a href="/signup">Create one here</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.querySelector('input[name="remember"]').checked;
+
+            // Clear previous errors
+            errorMessage.classList.remove('show');
+
+            // Basic validation
+            if (!email || !password) {
+                errorMessage.textContent = 'Please fill in all fields';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                errorMessage.textContent = 'Please enter a valid email address';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, remember })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href = '/explore';
+                } else {
+                    errorMessage.textContent = data.error || 'Login failed';
+                    errorMessage.classList.add('show');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.classList.add('show');
+            }
+        });
+
+        // Profile menu toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const profileMenu = document.getElementById('profileMenu');
+        
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            document.addEventListener('click', () => {
+                profileMenu.style.display = 'none';
+            });
+
+            profileMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | Maharashtra Private Universities</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+        .signup-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f37a1f 0%, #ff9a56 100%);
+        }
+
+        .signup-box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 48px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .signup-header h1 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .signup-header p {
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(243, 122, 31, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--muted);
+        }
+
+        .password-requirements {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 8px;
+            padding: 12px;
+            background: var(--surface);
+            border-radius: 6px;
+            line-height: 1.6;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+        }
+
+        .signup-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(243, 122, 31, 0.3);
+        }
+
+        .signup-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid var(--border);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .signup-box {
+                padding: 32px 24px;
+            }
+
+            .signup-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar__ribbon">
+            <div class="container topbar__ribbon-inner">
+                <div class="ribbon__left">
+                    <span>Government of Maharashtra</span>
+                    <span class="divider">|</span>
+                    <span>Department of Higher Education</span>
+                </div>
+                <div class="ribbon__right">
+                    <a href="#" class="ribbon-link">Skip to Main Content</a>
+                    <a href="#" class="ribbon-link">A-</a>
+                    <a href="#" class="ribbon-link">A</a>
+                    <a href="#" class="ribbon-link">A+</a>
+                </div>
+            </div>
+        </div>
+        <div class="container topbar__inner">
+            <div class="brand">
+                <div class="brand__logo">MPU</div>
+                <div class="brand__text">
+                    <p class="brand__title">Maharashtra Private Universities</p>
+                    <p class="brand__subtitle">Unified Admissions Portal</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="/#overview">Overview</a>
+                <a href="/#universities">Universities</a>
+            </nav>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                {% if user_name %}
+                    <div style="position: relative; display: inline-block;">
+                        <button id="profileBtn" style="background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">👤</button>
+                        <div id="profileMenu" style="display: none; position: absolute; right: 0; top: 50px; background: white; border: 2px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 160px; z-index: 100;">
+                            <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--primary-dark);">{{ user_name }}</div>
+                            <a href="/logout" style="display: block; padding: 12px 16px; color: var(--text); text-decoration: none; transition: background 0.2s;">Logout</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="/login" class="ghost">Login</a>
+                {% endif %}
+                <a href="/explore" class="cta">Start Application</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="signup-container">
+            <div class="signup-box">
+                <div class="signup-header">
+                    <h1>Create Account</h1>
+                    <p>Join the admissions portal</p>
+                </div>
+
+                <form id="signupForm">
+                    <div class="error-message" id="errorMessage"></div>
+                    <div class="success-message" id="successMessage"></div>
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="John Doe"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="your.email@example.com"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="••••••••"
+                            required
+                        />
+                        <div class="password-requirements">
+                            Password must be at least 6 characters long
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="••••••••"
+                            required
+                        />
+                    </div>
+
+                    <button type="submit" class="signup-btn">Create Account</button>
+                </form>
+
+                <div class="login-link">
+                    Already have an account? <a href="/login">Login here</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const signupForm = document.getElementById('signupForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            // Clear previous messages
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+
+            // Validation
+            if (!name || !email || !password || !confirmPassword) {
+                errorMessage.textContent = 'Please fill in all fields';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                errorMessage.textContent = 'Please enter a valid email address';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password must be at least 6 characters';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        confirm_password: confirmPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    successMessage.textContent = 'Account created successfully! Redirecting...';
+                    successMessage.classList.add('show');
+                    setTimeout(() => {
+                        window.location.href = '/explore';
+                    }, 2000);
+                } else {
+                    errorMessage.textContent = data.error || 'Sign up failed';
+                    errorMessage.classList.add('show');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.classList.add('show');
+            }
+        });
+
+        // Profile menu toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const profileMenu = document.getElementById('profileMenu');
+        
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            document.addEventListener('click', () => {
+                profileMenu.style.display = 'none';
+            });
+
+            profileMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maharashtra Private Universities | Application Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar__ribbon">
+            <div class="container topbar__ribbon-inner">
+                <div class="ribbon__left">
+                    <span>Government of Maharashtra</span>
+                    <span class="divider">|</span>
+                    <span>Department of Higher Education</span>
+                </div>
+                <div class="ribbon__right">
+                    <a href="#" class="ribbon-link">Skip to Main Content</a>
+                    <a href="#" class="ribbon-link">A-</a>
+                    <a href="#" class="ribbon-link">A</a>
+                    <a href="#" class="ribbon-link">A+</a>
+                </div>
+            </div>
+        </div>
+        <div class="container topbar__inner">
+            <div class="brand">
+                <div class="brand__logo">MPU</div>
+                <div class="brand__text">
+                    <p class="brand__title">Maharashtra Private Universities</p>
+                    <p class="brand__subtitle">Unified Admissions Portal</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#overview">Overview</a>
+                <a href="#bureaus">Bureaus</a>
+                <a href="#universities">Universities</a>
+                <a href="#links">Important Links</a>
+            </nav>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                {% if user_name %}
+                    <div style="position: relative; display: inline-block;">
+                        <button id="profileBtn" style="background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">👤</button>
+                        <div id="profileMenu" style="display: none; position: absolute; right: 0; top: 50px; background: white; border: 2px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 160px; z-index: 100;">
+                            <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--primary-dark);">{{ user_name }}</div>
+                            <a href="/logout" style="display: block; padding: 12px 16px; color: var(--text); text-decoration: none; transition: background 0.2s;">Logout</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="/login" class="ghost">Login</a>
+                {% endif %}
+                <a href="/explore" class="cta">Start Application</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="overview">
+            <div class="container hero__grid">
+                <div class="hero__content">
+                    <p class="tag">2026 Admissions Open</p>
+                    <h1>Find the right university in Maharashtra</h1>
+                    <p class="lead">Explore accredited institutions, compare programs, and apply with confidence. All university data is curated in one place.</p>
+                    <div class="hero__actions">
+                        <a href="/explore" class="cta cta--dark">Explore Universities</a>
+                        <a href="/download-brochure" class="ghost" download>Download Brochure</a>
+                    </div>
+                </div>
+                <div class="hero__panel">
+                    <div class="stats">
+                        <div>
+                            <p class="stats__label">Universities Listed</p>
+                            <p class="stats__value">{{ universities | length }}</p>
+                        </div>
+                        <div>
+                            <p class="stats__label">Private</p>
+                            <p class="stats__value">37</p>
+                        </div>
+                        <div>
+                            <p class="stats__label">Deemed</p>
+                            <p class="stats__value">23</p>
+                        </div>
+                    </div>
+                    <div class="panel-card">
+                        <h3>Eligibility Snapshot</h3>
+                        <ul>
+                            <li>12th Grade or equivalent</li>
+                            <li>Entrance tests as applicable</li>
+                            <li>English proficiency for select programs</li>
+                        </ul>
+                        <button class="ghost ghost--light">View Full Criteria</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="notice">
+            <div class="container notice__inner">
+                <span class="notice__title">Latest Notice</span>
+                <p>University admissions 2026 applications open. Explore and compare Private & Deemed universities below.</p>
+                <a class="link" href="#universities">View universities</a>
+            </div>
+        </section>
+
+        <section class="search">
+            <div class="container">
+                <h2 style="margin-bottom: 16px;">Search Universities</h2>
+                <div class="search__bar">
+                    <input id="searchInput" type="text" placeholder="Search by university, city, or address" />
+                    <select id="filterType">
+                        <option value="all">All Types</option>
+                        <option value="Private">Private</option>
+                        <option value="Deemed">Deemed</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="listings" id="universities">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Universities</h2>
+                    <p>All universities in Maharashtra with key details and contact information.</p>
+                </div>
+                <div id="cards" class="cards">
+                    {% for uni in universities %}
+                    <article class="card" data-type="{{ uni.type }}" data-name="{{ uni.name }}" data-city="{{ uni.city }}" data-address="{{ uni.address }}">
+                        <div class="card__header">
+                            <div>
+                                <h3>{{ uni.name }}</h3>
+                                <p class="muted">{{ uni.city if uni.city else uni.address.split(',')[-1] }}</p>
+                            </div>
+                            <span class="pill">{{ uni.type }}</span>
+                        </div>
+                        <div class="card__body">
+                            <p class="label">Status</p>
+                            <p class="value">{{ uni.status }}</p>
+                            <p class="label">Address</p>
+                            <p class="muted">{{ uni.address }}</p>
+                        </div>
+                        <div class="card__footer">
+                            {% if uni.website %}
+                            <a href="{{ uni.website }}" target="_blank" rel="noopener" class="cta cta--small">Visit Website</a>
+                            {% endif %}
+                            <a href="/explore" class="ghost ghost--dark">More Info</a>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-links" id="links">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Contact Us</h2>
+                    <p>Have questions? Get in touch with us</p>
+                </div>
+                
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <form id="contactForm" style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="error-message" id="contactError" style="display: none; background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;"></div>
+                        <div class="success-message" id="contactSuccess" style="display: none; background: #dcfce7; color: #166534; padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;"></div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="contactName" style="font-weight: 600; color: var(--primary-dark);">Name</label>
+                            <input 
+                                type="text" 
+                                id="contactName" 
+                                name="name" 
+                                placeholder="Your full name"
+                                required
+                                style="padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; font-family: inherit;"
+                            />
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="contactEmail" style="font-weight: 600; color: var(--primary-dark);">Email</label>
+                            <input 
+                                type="email" 
+                                id="contactEmail" 
+                                name="email" 
+                                placeholder="your.email@example.com"
+                                required
+                                style="padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; font-family: inherit;"
+                            />
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="contactMessage" style="font-weight: 600; color: var(--primary-dark);">Message</label>
+                            <textarea 
+                                id="contactMessage" 
+                                name="message" 
+                                placeholder="Your message here..."
+                                required
+                                rows="5"
+                                style="padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; font-family: inherit; resize: vertical;"
+                            ></textarea>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            style="padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                        >
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="chatbot-button" id="chatToggle" aria-label="Open chatbot">
+        <span class="chatbot-icon">💬</span>
+    </button>
+
+    <div class="chatbot-panel" id="chatPanel" aria-hidden="true">
+        <div class="chatbot-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="{{ url_for('static', filename='profile.jpeg') }}" alt="Ravi" class="chatbot-avatar" />
+                <div>
+                    <p class="chatbot-title" data-en="Ravi - Admissions Assistant" data-mr="रवि - प्रवेश सहाय्यक">Ravi - Admissions Assistant</p>
+                    <p class="chatbot-subtitle" data-en="Your guide to universities" data-mr="तुमचा विद्यापीठ मार्गदर्शक">Your guide to universities</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="lang-toggle" id="langToggle" title="Switch to Marathi">🇮🇳 मराठी</button>
+                <button class="chatbot-close" id="chatClose" aria-label="Close chatbot">×</button>
+            </div>
+        </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="chatbot-message bot" data-en="Namaste! I'm Ravi, and I'm here to help you with admissions, programs, and eligibility questions." data-mr="नमस्कार! मी रवि आहे, आणि मी तुम्हाला प्रवेश, कार्यक्रम आणि पात्रतेबद्धल मदत करण्यासाठी येथे आहे.">Namaste! I'm Ravi, and I'm here to help you with admissions, programs, and eligibility questions.</div>
+        </div>
+        <form class="chatbot-input" id="chatForm">
+            <input type="text" id="chatInput" placeholder="Type your question..." data-placeholder-en="Type your question..." data-placeholder-mr="तुमचा प्रश्न टाइप करा..." autocomplete="off" />
+            <button type="submit" class="cta" data-en="Send" data-mr="पाठवा">Send</button>
+        </form>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const filterType = document.getElementById('filterType');
+        const cards = Array.from(document.querySelectorAll('.card'));
+
+        const matchesQuery = (card, query) => {
+            const name = card.dataset.name.toLowerCase();
+            const city = card.dataset.city.toLowerCase();
+            const address = card.dataset.address.toLowerCase();
+            return name.includes(query) || city.includes(query) || address.includes(query);
+        };
+
+        const applyFilters = () => {
+            const query = searchInput.value.trim().toLowerCase();
+            const type = filterType.value;
+
+            cards.forEach((card) => {
+                const matchesType = type === 'all' || card.dataset.type === type;
+                const matchesText = query === '' || matchesQuery(card, query);
+                card.style.display = matchesType && matchesText ? 'flex' : 'none';
+            });
+        };
+
+        searchInput.addEventListener('input', applyFilters);
+        filterType.addEventListener('change', applyFilters);
+
+        // Language switching
+        let currentLang = 'en';
+        const langToggle = document.getElementById('langToggle');
+        
+        const switchLanguage = () => {
+            currentLang = currentLang === 'en' ? 'mr' : 'en';
+            
+            // Update all elements with data attributes
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if (el.tagName === 'INPUT') {
+                    el.placeholder = el.dataset[`placeholder${currentLang === 'en' ? 'En' : 'Mr'}`];
+                } else {
+                    el.textContent = el.dataset[currentLang];
+                }
+            });
+            
+            // Update toggle button
+            langToggle.textContent = currentLang === 'en' ? '🇮🇳 मराठी' : '🇬🇧 English';
+            langToggle.title = currentLang === 'en' ? 'Switch to Marathi' : 'Switch to English';
+        };
+        
+        langToggle.addEventListener('click', switchLanguage);
+
+        const chatToggle = document.getElementById('chatToggle');
+        const chatPanel = document.getElementById('chatPanel');
+        const chatClose = document.getElementById('chatClose');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        const toggleChat = (open) => {
+            const isOpen = open ?? chatPanel.classList.toggle('chatbot-panel--open');
+            chatPanel.classList.toggle('chatbot-panel--open', isOpen);
+            chatPanel.setAttribute('aria-hidden', String(!isOpen));
+            if (isOpen) {
+                chatInput.focus();
+            }
+        };
+
+        chatToggle.addEventListener('click', () => toggleChat(true));
+        chatClose.addEventListener('click', () => toggleChat(false));
+
+        const appendMessage = (text, sender) => {
+            const message = document.createElement('div');
+            message.className = `chatbot-message ${sender}`;
+            message.textContent = text;
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        chatForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            appendMessage(text, 'user');
+            chatInput.value = '';
+
+            const typing = document.createElement('div');
+            typing.className = 'chatbot-message bot chatbot-typing';
+            typing.textContent = currentLang === 'en' ? 'Typing...' : 'टाइप करत आहे...';
+            chatMessages.appendChild(typing);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, language: currentLang })
+                });
+
+                const contentType = response.headers.get('content-type') || '';
+                const isJson = contentType.includes('application/json');
+                const payload = isJson ? await response.json() : await response.text();
+
+                typing.remove();
+
+                if (response.ok && isJson && payload.reply) {
+                    appendMessage(payload.reply, 'bot');
+                } else if (isJson && payload.error) {
+                    const details = payload.details ? ` (${payload.details})` : '';
+                    appendMessage(`${payload.error}${details}`, 'bot');
+                } else {
+                    appendMessage(
+                        `Request failed (${response.status}). ${isJson ? JSON.stringify(payload) : payload}`,
+                        'bot'
+                    );
+                }
+            } catch (error) {
+                typing.remove();
+                const errorMsg = currentLang === 'en' 
+                    ? 'Unable to reach the server right now.' 
+                    : 'सध्या सर्व्हरशी संपर्क साधू शकत नाही.';
+                appendMessage(errorMsg, 'bot');
+            }
+        });
+
+        // Contact form handling
+        const contactForm = document.getElementById('contactForm');
+        const contactError = document.getElementById('contactError');
+        const contactSuccess = document.getElementById('contactSuccess');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+
+            // Clear previous messages
+            contactError.style.display = 'none';
+            contactSuccess.style.display = 'none';
+
+            // Validation
+            if (!name || !email || !message) {
+                contactError.textContent = 'Please fill in all fields';
+                contactError.style.display = 'block';
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                contactError.textContent = 'Please enter a valid email address';
+                contactError.style.display = 'block';
+                return;
+            }
+
+            if (message.length < 10) {
+                contactError.textContent = 'Message must be at least 10 characters';
+                contactError.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, message })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    contactSuccess.textContent = 'Message sent successfully! We will get back to you soon.';
+                    contactSuccess.style.display = 'block';
+                    contactForm.reset();
+                    setTimeout(() => {
+                        contactSuccess.style.display = 'none';
+                    }, 5000);
+                } else {
+                    contactError.textContent = data.error || 'Failed to send message';
+                    contactError.style.display = 'block';
+                }
+            } catch (error) {
+                contactError.textContent = 'An error occurred. Please try again.';
+                contactError.style.display = 'block';
+            }
+        });
+
+        // Profile menu toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const profileMenu = document.getElementById('profileMenu');
+        
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            document.addEventListener('click', () => {
+                profileMenu.style.display = 'none';
+            });
+
+            profileMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+    </script>
+</body>
+</html>

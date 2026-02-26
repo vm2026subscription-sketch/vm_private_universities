@@ -1,0 +1,232 @@
+[
+    {
+        "Sr.No":10,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Bharati Vidyapeeth",
+        "Address":"LBS Road Next to Alka Talkies, Sadashiv Peth, Pune",
+        "Zip":411030,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.bharatividyapeeth.edu"
+    },
+    {
+        "Sr.No":14,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Central Institute of Fisheries Education",
+        "Address":"Panch Marg, Off Yari Road, Versova, Andheri (West), Mumbai",
+        "Zip":400061,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.cife.edu.in"
+    },
+    {
+        "Sr.No":22,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"D. Y. Patil",
+        "Address":"Sector - 07, Nerul, Navi Mumbai",
+        "Zip":400706,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.dypatil.edu.in"
+    },
+    {
+        "Sr.No":23,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"D.Y Patil Educational Society",
+        "Address":"869 E ward Line Bazar, Kasaba Bavada, Kolhapur",
+        "Zip":416006,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://dypatiledu.com"
+    },
+    {
+        "Sr.No":24,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Datta Meghe Institute of Higher Education and Research",
+        "Address":"Sawangi (Meghe), Wardha",
+        "Zip":442107,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.dmiher.edu.in"
+    },
+    {
+        "Sr.No":26,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Deccan College Postgraduate & Research Institute",
+        "Address":"Deccan College Road, Yerawada, Pune",
+        "Zip":411006,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.deccollegesp.ac.in"
+    },
+    {
+        "Sr.No":27,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Defence Institute of Advanced Technology",
+        "Address":"Girinagar, Pune",
+        "Zip":411025,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.diat.ac.in"
+    },
+    {
+        "Sr.No":28,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Dr. D.Y. Patil Vidyapeeth",
+        "Address":"Sant Tukaram Nagar, Pimpri, Pune",
+        "Zip":411018,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.dypvidy.edu.in"
+    },
+    {
+        "Sr.No":30,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Film and Television Institute of India",
+        "Address":"Law college Road, Pune",
+        "Zip":411004,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.ftii.ac.in"
+    },
+    {
+        "Sr.No":33,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Gokhale Institute of Politics & Economics",
+        "Address":"846 Shivajinagar, BMCC Road, Pune",
+        "Zip":411004,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.gipe.ac.in"
+    },
+    {
+        "Sr.No":39,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Homi Bhabha National Institute, Regd. Office",
+        "Address":"Training School Complex, Anushaktinagar",
+        "Zip":400094,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.hbni.ac.in"
+    },
+    {
+        "Sr.No":53,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Indira Gandhi Institute of Development Research",
+        "Address":"Gen Arun Kumar Vaidya Marg, Film City Rd, Goregaon, Mumbai",
+        "Zip":400065,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.igidr.ac.in"
+    },
+    {
+        "Sr.No":55,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Institute of Chemical Technology",
+        "Address":"Nathalal Parekh Marg, Matunga, Mumbai",
+        "Zip":400019,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.ictmumbai.edu.in"
+    },
+    {
+        "Sr.No":57,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"International Institute for Population Sciences",
+        "Address":"Govandi Station Road, Deonar, Mumbai",
+        "Zip":400088,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.iips.net"
+    },
+    {
+        "Sr.No":77,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Krishna Vishwa Vidyapeeth",
+        "Address":"Near Dhebewadi Road, Karad, Distt. Satara",
+        "Zip":415539,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.kvv.ac.in"
+    },
+    {
+        "Sr.No":89,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"MGM Institute of Health Sciences",
+        "Address":"MGM Campus, Sector-18, Kamothe",
+        "Zip":410209,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.mgmihs.edu.in"
+    },
+    {
+        "Sr.No":91,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Narsee Monjee Institute of Management Studies",
+        "Address":"V. L. Mehta Road, Vile Parle",
+        "Zip":400056,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.nmims.edu"
+    },
+    {
+        "Sr.No":111,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Pravara Institute of Medical Sciences",
+        "Address":"Tal:Rahata, Dist:Ahmednagar, Loni",
+        "Zip":413736,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.pravara.com"
+    },
+    {
+        "Sr.No":125,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Sir J.J.School of Art, Architecture & Design, Mumbai",
+        "Address":"78, Dr. D. N. Road, Fort Mumbai",
+        "Zip":400001,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.sirjjschoolofart.ac.in"
+    },
+    {
+        "Sr.No":136,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Symbiosis International University",
+        "Address":"Gram: Lavale, Tal: Mulshi, District: Pune",
+        "Zip":412115,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.siu.ac.in"
+    },
+    {
+        "Sr.No":137,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Tata Institute of Fundamental Research",
+        "Address":"Dr Homi Bhabha Road, Navy Nagar, Colaba, Mumbai",
+        "Zip":400005,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.tifr.res.in"
+    },
+    {
+        "Sr.No":138,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Tata Institute of Social Sciences",
+        "Address":"VN Purav Marg, Deonar, Chembur, Mumbai",
+        "Zip":400088,
+        "state":"Maharashtra",
+        "Status":"Section-III & 12(B)",
+        "Website":"https://www.tiss.edu"
+    },
+    {
+        "Sr.No":144,
+        "Type":"Deemed to be Universities",
+        "Name of the University":"Tilak Maharashtra Vidyapeeth",
+        "Address":"Vidyapeeth Bhavan, Mukundnagar, Gultekdi, Pune",
+        "Zip":411037,
+        "state":"Maharashtra",
+        "Status":"Section-III",
+        "Website":"https://www.tmv.edu.in"
+    }
+]
