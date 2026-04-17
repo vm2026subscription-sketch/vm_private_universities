@@ -1,3 +1,4 @@
+from pymongo import MongoClient
 import json
 import os
 from io import BytesIO
@@ -21,66 +22,130 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
 
 # MongoDB connection
+# MongoDB connection
 MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/")
 try:
     client = MongoClient(MONGODB_URI)
     db = client["mvc_admissions"]
     users_collection = db["users"]
     contacts_collection = db["contacts"]
-    # Verify connection
+    universities_collection = db["universities"]
+
     client.admin.command('ping')
     print("[OK] Connected to MongoDB")
+
 except Exception as e:
     print(f"[ERROR] MongoDB connection failed: {e}")
     users_collection = None
     contacts_collection = None
 
-# Load universities from JSON
+
+# ✅ ADD THIS OUTSIDE try-except (VERY IMPORTANT)
+if users_collection is not None:
+    users_collection.insert_one({
+        "name": "test",
+        "email": "test@gmail.com",
+        "password": "123",
+        "favorites": []
+    })
+    print("Test user inserted")
 def load_universities():
-    universities = []
-    
-    # Load private universities
-    private_path = os.path.join(os.path.dirname(__file__), "data", "private_uni.json")
+    try:
+        data = list(universities_collection.find({}, {"_id": 0}))
+
+        uni_map = {}
+
+        for item in data:
+            name = item.get("Name of the University", "")
+
+            if name not in uni_map:
+                uni_map[name] = {
+                    "name": name,
+                    "city": item.get("Address", "").split(",")[-1].strip() if item.get("Address") else "",
+                    "type": item.get("category", ""),
+                    "address": item.get("Address", ""),
+                    "zip": item.get("Zip", ""),
+                    "status": item.get("Status", ""),
+                    "programs": []
+                }
+
+            course = item.get("Courses", "")
+            if course:
+                uni_map[name]["programs"].append(course)
+
+        return list(uni_map.values())
+
+    except Exception as e:
+        print("Error loading from MongoDB:", e)
+        return []
+    # ---------- PRIVATE ----------
+    private_path = os.path.join(os.path.dirname(__file__), "data", "private_university.json")
+    private_map = {}
+
     try:
         with open(private_path, "r") as f:
             private_data = json.load(f)
+
         for item in private_data:
-            universities.append({
-                "name": item.get("Name of the University", ""),
-                "city": item.get("Address", "").split(",")[-1].strip() if item.get("Address") else "",
-                "established": None,
-                "type": item.get("Type", "Private"),
-                "accreditation": item.get("Status", ""),
-                "programs": [],
-                "website": item.get("Website", ""),
-                "address": item.get("Address", ""),
-                "zip": item.get("Zip", ""),
-                "status": item.get("Status", ""),
-            })
+            name = item.get("Name of the University", "")
+
+            if name not in private_map:
+                private_map[name] = {
+                    "name": name,
+                    "city": item.get("Address", "").split(",")[-1].strip() if item.get("Address") else "",
+                    "established": None,
+                    "type": "Private",
+                    "accreditation": item.get("Status", ""),
+                    "programs": [],
+                    "website": item.get("Website", ""),
+                    "address": item.get("Address", ""),
+                    "zip": item.get("Zip", ""),
+                    "status": item.get("Status", ""),
+                }
+
+            course = item.get("Courses", "")
+            if course:
+                private_map[name]["programs"].append(course)
+
+        universities.extend(private_map.values())
+
     except Exception as e:
-        app.logger.error(f"Failed to load private universities: {e}")
-    
-    # Load deemed universities
-    deemed_path = os.path.join(os.path.dirname(__file__), "data", "deemed_uni.json")
+        app.logger.error(f"Private error: {e}")
+
+    # ---------- DEEMED ----------
+    deemed_path = os.path.join(os.path.dirname(__file__), "data", "deemed_university.json")
+    deemed_map = {}
+
     try:
         with open(deemed_path, "r") as f:
             deemed_data = json.load(f)
+
         for item in deemed_data:
-            universities.append({
-                "name": item.get("Name of the University", ""),
-                "city": item.get("Address", "").split(",")[-1].strip() if item.get("Address") else "",
-                "established": None,
-                "type": "Deemed",
-                "accreditation": item.get("Status", ""),
-                "programs": [],
-                "website": item.get("Website", ""),
-                "address": item.get("Address", ""),
-                "zip": item.get("Zip", ""),
-                "status": item.get("Status", ""),
-            })
+            name = item.get("Name of the University", "")
+
+            if name not in deemed_map:
+                deemed_map[name] = {
+                    "name": name,
+                    "city": item.get("Address", "").split(",")[-1].strip() if item.get("Address") else "",
+                    "established": None,
+                    "type": "Deemed",
+                    "accreditation": item.get("Status", ""),
+                    "programs": [],
+                    "website": item.get("Website", ""),
+                    "address": item.get("Address", ""),
+                    "zip": item.get("Zip", ""),
+                    "status": item.get("Status", ""),
+                }
+
+            course = item.get("Courses", "")
+            if course:
+                deemed_map[name]["programs"].append(course)
+
+        universities.extend(deemed_map.values())
+
     except Exception as e:
-        app.logger.error(f"Failed to load deemed universities: {e}")
-    
+        app.logger.error(f"Deemed error: {e}")
+
     return universities
 
 
@@ -145,6 +210,22 @@ def index():
     user_name = session.get("user_name")
     return render_template("index.html", universities=UNIVERSITIES, user_name=user_name)
 
+
+from bson import ObjectId
+
+@app.route("/save_college", methods=["POST"])
+def save_college():
+    if "user_id" not in session:
+        return jsonify({"status": "error", "message": "Login required"})
+
+    college_name = request.json.get("name")
+
+    users_collection.update_one(
+        {"_id": ObjectId(session["user_id"])},
+        {"$addToSet": {"favorites": college_name}}
+    )
+
+    return jsonify({"status": "success"})
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

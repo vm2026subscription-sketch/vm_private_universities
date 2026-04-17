@@ -340,7 +340,13 @@
                                 </div>
                                 {% endif %}
                             </div>
-
+                        <div class="course-container">
+    <button onclick="openCourses(this)" 
+        data-courses='{{ uni.programs | tojson }}'
+        class="cta cta--small">
+    View Courses
+</button>
+</div>
                             <div class="card-actions">
                                 {% if uni.website %}
                                 <a href="{{ uni.website }}" target="_blank" rel="noopener" class="cta cta--small">Visit Website</a>
@@ -478,24 +484,119 @@
         citySelect.addEventListener('change', applyFilters);
         statusSelect.addEventListener('change', applyFilters);
 
-        // Profile menu toggle
-        const profileBtn = document.getElementById('profileBtn');
-        const profileMenu = document.getElementById('profileMenu');
-        
-        if (profileBtn) {
-            profileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
-            });
-            
-            document.addEventListener('click', () => {
-                profileMenu.style.display = 'none';
-            });
+// Profile menu toggle
+const profileBtn = document.getElementById('profileBtn');
+const profileMenu = document.getElementById('profileMenu');
 
-            profileMenu.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
+if (profileBtn) {
+    profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    document.addEventListener('click', () => {
+        profileMenu.style.display = 'none';
+    });
+
+    profileMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+}
+
+function openCourses(btn) {
+    let courses = JSON.parse(btn.getAttribute("data-courses"));
+    let container = document.getElementById("courseList");
+    let search = document.getElementById("courseSearch");
+
+    function getCategory(course) {
+        course = course.toLowerCase();
+
+        if (course.includes("b.")) return "UG 🎓";
+        if (course.includes("m.")) return "PG 🎓";
+        if (course.includes("diploma")) return "Diploma 📜";
+        return "Other 📚";
+    }
+
+    function renderCourses(filteredCourses) {
+        container.innerHTML = "";
+
+        if (filteredCourses.length === 0) {
+            container.innerHTML = "<p>No courses found ❌</p>";
+            return;
         }
+
+        filteredCourses.forEach(course => {
+            let div = document.createElement("div");
+            div.className = "course-card";
+
+            let category = getCategory(course);
+
+            div.innerHTML = `
+                <strong>${course}</strong><br>
+                <small>${category}</small>
+            `;
+
+            container.appendChild(div);
+        });
+    }
+
+    // ✅ SHOW ALL COURSES INITIALLY
+    renderCourses(courses);
+
+    // ✅ COURSE COUNT
+    document.getElementById("courseCount").innerText = courses.length;
+
+    // 🔍 SEARCH
+    search.value = "";
+    search.oninput = function () {
+        let val = search.value.toLowerCase();
+        let filtered = courses.filter(c => c.toLowerCase().includes(val));
+        renderCourses(filtered);
+    };
+
+    document.getElementById("courseModal").style.display = "block";
+}
+
+window.onclick = function(event) {
+    let modal = document.getElementById("courseModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+
+function closeModal() {
+    document.getElementById("courseModal").style.display = "none";
+}
+
+function saveCollege(name) {
+    fetch("/save_college", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            alert("Saved successfully ⭐");
+        } else {
+            alert("Please login first");
+        }
+    });
+}
     </script>
+   <div id="courseModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+
+        <h3>🎓 Courses Offered (<span id="courseCount"></span>)</h3>
+
+        <input type="text" id="courseSearch" placeholder="Search courses..." class="search-box">
+
+        <div id="courseList" class="course-grid"></div>
+    </div>
+</div>
+</div>
 </body>
 </html>
